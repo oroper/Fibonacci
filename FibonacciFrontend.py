@@ -55,13 +55,6 @@ class Interfaccia(wx.Frame):
         self.result.SetLabel(arg)
 
 
-def gui():
-    app = wx.App(False)
-    frame = Interfaccia(None)
-    frame.Show()
-    app.MainLoop()
-
-
 def calc2(arg1):
     ws = create_connection(("127.0.0.1", 35491))
     '''"ws://localhost:8765"'''
@@ -87,15 +80,17 @@ def connection():
 
 
 if __name__ == "__main__":
-    t1 = threading.Thread(target=gui, name='t1')
-    t2 = threading.Thread(target=connection, name='t2')
+    t1 = threading.Thread(target=connection, name='t2')
+    print("Thread di partenza: " + str(threading.get_ident()))
 
     t1.daemon = True
-    t2.daemon = True
     # starting threads
     t1.start()
-    t2.start()
+
+    app = wx.App(False)
+    frame = Interfaccia(None)
+    frame.Show()
+    app.MainLoop()
 
     # wait until all threads finish
     t1.join()
-    t2.join()
